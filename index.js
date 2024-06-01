@@ -58,4 +58,4 @@ client.on("interactionCreate", async (interaction) => {
     }
 });
 
-client.login(token);
+client.login(token).then(r => "Bot login and working properly");
