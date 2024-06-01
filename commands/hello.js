@@ -4,7 +4,6 @@
  * @author Created by Tschirakatsu
  * @version 26.9.2023
  */
-const { CommandInteraction } = require("discord.js");
 
 
 module.exports = {
@@ -27,7 +26,7 @@ module.exports = {
         ],
     },
     async execute(interaction) {
-        const { member, options } = interaction;
+        const { options } = interaction;
         const userOption = options.getMember("user");
         const reasonOption = interaction.options.getString('reason');
         const user = interaction.user;
