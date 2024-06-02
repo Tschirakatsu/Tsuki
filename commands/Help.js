@@ -18,7 +18,6 @@ module.exports = {
         const HelpEmbed = new EmbedBuilder()
             .setTitle('Documentation du Bot Tsuki')
             .setDescription(`demandée par ${user}`)
-            .setThumbnail(userOption.user.displayAvatarURL({dynamic: true}))
             .addFields(
                 {name: '/Hello', value: "Cette commande est utilisée pour dire bonjour a quelqu'un, n'importe qui, cela va retourner un embed avec un bonjour et un gif random depuis mon ptit ficher JSON", inline: true},
                 {name: '/ban', value: "commande ban, restreinte aux personnes ayant les droits, si vous avez les droits, les paramètres demandés sont l'utilisateur et la raison, si vous ajouter le log-chanel dans nya-ban ça va copier l'embed de ban et créer un thread publique pour que les gens puissent trashtalk le banni.", inline: true}
