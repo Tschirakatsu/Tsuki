@@ -5,7 +5,7 @@
  * @version 02/06/2024
  */
 
-const {CommandInteraction, PermissionsBitField, EmbedBuilder} = require("discord.js");
+const { PermissionsBitField, EmbedBuilder} = require("discord.js");
 const moment = require('moment');
 const fs = require('fs');
 
@@ -26,8 +26,9 @@ module.exports = {
                 description: "The reason for the ban.",
                 type: 3, // String type
                 required: true,
-            },
+            }
         ],
+        defaultMemberPermissions: PermissionsBitField.Flags.BAN_MEMBERS,
     },
     async execute(interaction) {
         const {member, options} = interaction;
@@ -61,6 +62,8 @@ module.exports = {
 
         //Ban the user and send a message in an embed
         await userOption.ban({reason});
+
+
         const banEmbed = new EmbedBuilder()
             .setTitle('User Banned')
             .setDescription(`${userOption.user.tag} has been banned from this server!`)

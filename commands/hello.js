@@ -5,8 +5,6 @@
  * @version 26.9.2023
  */
 
-
-const tenorGif = require("../Miscelanous/tenorGif");
 const { EmbedBuilder } = require('discord.js');
 const fs = require('fs');
 
