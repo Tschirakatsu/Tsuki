@@ -8,6 +8,7 @@
 
 const tenorGif = require("../Miscelanous/tenorGif");
 const { EmbedBuilder } = require('discord.js');
+const fs = require('fs');
 
 module.exports = {
     data: {
@@ -33,7 +34,8 @@ module.exports = {
         const userOption = options.getMember("user");
         const reasonOption = interaction.options.getString('reason');
         const user = interaction.user;
-        const gifUrl = await tenorGif.getRandomGif('hi anime cute girl');
+        const gifsData = JSON.parse(fs.readFileSync('./Miscelanous/hello.json', 'utf8'));
+        const gifUrl = gifsData.helloGIFs[Math.floor(Math.random() * gifsData.helloGIFs.length)];
 
         // Create an embed with the GIF
         const embed = new EmbedBuilder()
