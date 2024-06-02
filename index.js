@@ -50,9 +50,9 @@ client.on("interactionCreate", async (interaction) => {
         // execute the command
         await command.execute(interaction);
     } catch (error) {
-        console.error(error);
+        console.error(`Error executing ${commandName} command:`, error);
         interaction.reply({
-            content: "Une erreur s'est produite lors de l'exécution de cette commande.",
+            content: "An error occurred while processing this command.",
             ephemeral: true,
         });
     }
