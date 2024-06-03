@@ -1,29 +1,20 @@
-/**
- * @file    Help.js
- * @brief   to require help on bot's commands
- * @author  Created by tschi
- * @version 02/06/2024
- */
-
 const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    data: {
-        name: "help",
-        description: "Show help messages for this bot",
-    },
-    async execute(interaction) {
-        const user = interaction.user.tag;
-
-        const HelpEmbed = new EmbedBuilder()
-            .setTitle('Documentation du Bot Tsuki')
-            .setDescription(`demandée par ${user}`)
-            .addFields(
-                {name: '/Hello', value: "Cette commande est utilisée pour dire bonjour a quelqu'un, n'importe qui, cela va retourner un embed avec un bonjour et un gif random depuis mon ptit ficher JSON", inline: true},
-                {name: '/ban', value: "commande ban, restreinte aux personnes ayant les droits, si vous avez les droits, les paramètres demandés sont l'utilisateur et la raison, si vous ajouter le log-chanel dans nya-ban ça va copier l'embed de ban et créer un thread publique pour que les gens puissent trashtalk le banni.", inline: true}
-            )
-            .setColor('#FF0000'); // Red color for ban embed
-
-            interaction.reply({ embeds: [HelpEmbed] });
-    }
-}
+  data: {
+      name: "help",
+      description: "Display help for the bot commands.",
+  },
+  async execute(interaction) {
+    const user = interaction.user;
+    const helpEmbed = new EmbedBuilder()
+        .setTitle('Help Commands')
+        .setDescription(`Here are the available commands and their usage.\n`)
+        .addFields(
+            { name: '/ban', value: 'Ban a user from the server. This command will send a ban message, log the ban to the designated channel, and create a thread in that channel for further discussion about the ban.' },
+            { name: '/hello', value: 'Say hello to someone with a personalized reason. The bot will respond with an embed containing a random GIF of saying "Hello!"' }
+        )
+        .setFooter({text: `Requested by ${user.tag}`, iconURL: user.displayAvatarURL({dynamic: true})}); // Footer with the user who invoked the command
+    interaction.reply({ embeds: [helpEmbed], ephemeral: true });
+  },
+};
