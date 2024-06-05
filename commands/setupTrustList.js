@@ -33,7 +33,11 @@ module.exports = {
             untrustedRoleId: untrustedRole.id,
             memberRoleId: memberRole.id,
         };
-        fs.writeFileSync(jsonFile, JSON.stringify(data));
+
+        // Create the JSON file if it doesn't exist
+        if (!fs.existsSync(jsonFile)) {
+            fs.writeFileSync(jsonFile, JSON.stringify(data));
+        }
 
         // Get the allowed roles from the interaction options
         const allowedRoles = interaction.options.getRole('allowed_roles').value;
