@@ -33,14 +33,11 @@ module.exports = {
             untrustedRoleId: untrustedRole.id,
             memberRoleId: memberRole.id,
         };
-
-        // Create the JSON file if it doesn't exist
-        if (!fs.existsSync(jsonFile)) {
-            fs.writeFileSync(jsonFile, JSON.stringify(data));
-        }
+        fs.writeFileSync(jsonFile, JSON.stringify(data));
 
         // Get the allowed roles from the interaction options
-        const allowedRoles = interaction.options.getRole('allowed_roles').value;
+        const allowedRolesOption = interaction.options.getRole('allowed_roles');
+        const allowedRoles = allowedRolesOption ? [allowedRolesOption.value] : [];
 
         // Create a channel named "TrustList" and send an embed
         const trustlistChannel = await interaction.guild.channels.create('TrustList', {
