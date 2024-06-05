@@ -41,7 +41,7 @@ module.exports = {
 
         // Create a channel named "TrustList" and send an embed
         const trustlistChannel = await interaction.guild.channels.create('TrustList', {
-            type: 'GUILD_TEXT',
+            type: 0,
             permissionOverwrites: [
                 {
                     id: interaction.guild.id,
