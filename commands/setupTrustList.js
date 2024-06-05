@@ -12,7 +12,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('setuptrustlist')
         .setDescription('Setup the TrustList for this server')
-        .setDefaultPermissions(PermissionBitFields.ManageRoles), // Corrected method name
+        .setDefaultPermissions(PermissionBitFields.MANAGE_ROLES), // Corrected method name
     async execute(interaction) {
         const guildId = interaction.guild.id;
         const jsonFile = `./Trustlists/Servers/${guildId}.json`; // Generate a JSON file with ServerID as filename
@@ -55,7 +55,7 @@ module.exports = {
         fs.writeFileSync(jsonFile, JSON.stringify(data));
 
         // Fetch the Manage Roles role
-        const manageRoles = interaction.guild.roles.cache.find((role) => role.permissions.has.ManageRoles);
+        const manageRoles = interaction.guild.roles.cache.find((role) => role.permissions.has.MANAGE_ROLES);
 
         // Create a channel named "TrustList" and send an embed with appropriate permissions
         const trustlistChannel = await interaction.guild.channels.create({
