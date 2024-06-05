@@ -5,48 +5,29 @@
  * @version 03/06/2024
  */
 
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, EmbedBuilder } = require('@discordjs/builders');
 const fs = require('fs');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('setuptrustlist')
         .setDescription('Setup the TrustList for this server')
-        .setDefaultPermissions(PermissionFlagsBits.MANAGE_ROLES), // Corrected method name
+        .addRoleOption((option) =>
+            option
+                .setName('allowed_roles')
+                .setDescription('Roles allowed to send messages and use commands in the trustlist channel')
+                .setRequired(true)
+        ),
     async execute(interaction) {
         const guildId = interaction.guild.id;
         const jsonFile = `./Trustlists/Servers/${guildId}.json`; // Generate a JSON file with ServerID as filename
-        let trustedRole, untrustedRole, memberRole;
 
-        // If roles are not specified by the user, create them
-        if (!interaction.options.getRole('trusted')) {
-            trustedRole = await interaction.guild.roles.create({
-                name: 'Trusted',
-                color: '#00ff00',
-            });
-        } else {
-            trustedRole = interaction.options.getRole('trusted');
-        }
+        // Create or fetch the roles
+        const trustedRole = await getOrCreateRole(interaction.guild, 'Trusted', '#00ff00');
+        const untrustedRole = await getOrCreateRole(interaction.guild, 'Untrusted', '#ff0000');
+        const memberRole = await getOrCreateRole(interaction.guild, 'Member', '#0e70bb');
 
-        if (!interaction.options.getRole('untrusted')) {
-            untrustedRole = await interaction.guild.roles.create({
-                name: 'Untrusted',
-                color: '#ff0000',
-            });
-        } else {
-            untrustedRole = interaction.options.getRole('untrusted'); // corrected the typo here, it was previously 'untrustedRole' which should be 'untrusted'
-        }
-
-        if (!interaction.options.getRole('member')) {
-            memberRole = await interaction.guild.roles.create({
-                name: 'Member',
-                color: '#0e70bb',
-            });
-        } else {
-            memberRole = interaction.options.getRole('member');
-        }
-
-        // Store the roles id in a JSON file
+        // Store the role IDs in a JSON file
         const data = {
             trustedRoleId: trustedRole.id,
             untrustedRoleId: untrustedRole.id,
@@ -54,30 +35,42 @@ module.exports = {
         };
         fs.writeFileSync(jsonFile, JSON.stringify(data));
 
-        // Fetch the Manage Roles role
-        const manageRoles = interaction.guild.roles.cache.find((role) => role.PermissionFlagsBits.has.MANAGE_ROLES);
+        // Get the allowed roles from the interaction options
+        const allowedRoles = interaction.options.getRole('allowed_roles').value;
 
-        // Create a channel named "TrustList" and send an embed with appropriate permissions
-        const trustlistChannel = await interaction.guild.channels.create({
-            name: 'TrustList',
+        // Create a channel named "TrustList" and send an embed
+        const trustlistChannel = await interaction.guild.channels.create('TrustList', {
             type: 'GUILD_TEXT',
             permissionOverwrites: [
                 {
-                    id: interaction.guild.id, // Deny @everyone from sending messages in the channel
+                    id: interaction.guild.id,
                     deny: ['SEND_MESSAGES'],
                 },
-                {
-                    id: manageRoles.id, // Allow Manage Roles members to send messages and use commands
+                ...allowedRoles.map((role) => ({
+                    id: role,
                     allow: ['SEND_MESSAGES', 'USE_APPLICATION_COMMANDS'],
-                },
+                })),
             ],
         });
 
+        // Create an embed for the trustlist setup
         const embed = new EmbedBuilder()
-            .setColor('#0099ff')
             .setTitle('TrustList Setup')
-            .setDescription(`This channel has been setup as the trustlist for the server '${interaction.guild.name}'`);
+            .setDescription(`This channel has been set up as the trustlist for the server '${interaction.guild.name}'`)
+            .setColor('#0099ff'); // Blue color for embed
 
         await trustlistChannel.send({ embeds: [embed] });
     },
 };
+
+async function getOrCreateRole(guild, roleName, color) {
+    const existingRole = guild.roles.cache.find((role) => role.name === roleName);
+    if (existingRole) {
+        return existingRole;
+    } else {
+        return await guild.roles.create({
+            name: roleName,
+            color: color,
+        });
+    }
+}
