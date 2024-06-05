@@ -5,7 +5,7 @@
  * @version 03/06/2024
  */
 
-const { SlashCommandBuilder, Permissions } = require('discord.js');
+const { SlashCommandBuilder, Permissions, MessageEmbed } = require('discord.js');
 const fs = require('fs');
 
 module.exports = {
