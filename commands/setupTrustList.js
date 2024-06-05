@@ -12,7 +12,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('setuptrustlist')
         .setDescription('Setup the TrustList for this server')
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles), // Restrict command usage to users with Manage Roles permission
+        .setDefaultPermissions(PermissionFlagsBits.ManageRoles), // Corrected method name
     async execute(interaction) {
         const guildId = interaction.guild.id;
         const jsonFile = `./Trustlists/Servers/${guildId}.json`; // Generate a JSON file with ServerID as filename
