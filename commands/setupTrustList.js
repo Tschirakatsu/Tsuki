@@ -5,7 +5,7 @@
  * @version 03/06/2024
  */
 
-const { SlashCommandBuilder, EmbedBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, Permissions } = require('discord.js');
 const fs = require('fs');
 
 module.exports = {
@@ -41,21 +41,21 @@ module.exports = {
 
         // Create a channel named "TrustList" and send an embed
         const trustlistChannel = await interaction.guild.channels.create('TrustList', {
-            type: 0,
+            type: 'GUILD_TEXT',
             permissionOverwrites: [
                 {
                     id: interaction.guild.id,
-                    deny: ['SEND_MESSAGES'],
+                    deny: [Permissions.FLAGS.SEND_MESSAGES],
                 },
                 ...allowedRoles.map((role) => ({
                     id: role,
-                    allow: ['SEND_MESSAGES', 'USE_APPLICATION_COMMANDS'],
+                    allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS],
                 })),
             ],
         });
 
         // Create an embed for the trustlist setup
-        const embed = new EmbedBuilder()
+        const embed = new MessageEmbed()
             .setTitle('TrustList Setup')
             .setDescription(`This channel has been set up as the trustlist for the server '${interaction.guild.name}'`)
             .setColor('#0099ff'); // Blue color for embed
