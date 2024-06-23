@@ -53,8 +53,8 @@ module.exports = {
             const jsonFile = `${trustlistsPath}/${guildId}.json`; // Generate a JSON file with ServerID as filename
 
             // Create or fetch the roles
-            const adminRoles = interaction.options.get('admin_roles').roles.map((role) => role.id);
-            const modRoles = interaction.options.get('mod_roles').roles.map((role) => role.id);
+            const adminRole = interaction.options.get('admin_role').role;
+            const modRole = interaction.options.get('mod_role').role;
             let trustedRole, untrustedRole, memberRole;
             if (interaction.options.get('trusted_role')) {
                 trustedRole = await getOrCreateRole(interaction.guild, interaction.options.get('trusted_role').value, '#00ff00');
