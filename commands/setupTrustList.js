@@ -141,8 +141,10 @@ module.exports = {
             await trustlistChannel.send({ embeds: [embed] });
         } catch (error) {
             console.error(error);
-            await interaction.reply('Error setting up trustlist. Please try again later.', error);
-            ephemeral = true;
+            interaction.reply({
+                content: 'Error setting up trustlist. Please try again later.', error,
+                ephemeral: true, //This makes the reply visible only to the executor and discardable.
+            });
         }
     },
 };
