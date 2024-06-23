@@ -30,24 +30,6 @@ module.exports = {
                 .setName('mod_role')
                 .setDescription('Mod role')
                 .setRequired(true)
-        )
-        .addStringOption((option) =>
-            option
-                .setName('trusted_role')
-                .setDescription('Trusted role')
-                .setRequired(false)
-        )
-        .addStringOption((option) =>
-            option
-                .setName('untrusted_role')
-                .setDescription('Untrusted role')
-                .setRequired(false)
-        )
-        .addStringOption((option) =>
-            option
-                .setName('member_role')
-                .setDescription('Member role')
-                .setRequired(false)
         ),
     async execute(interaction) {
         if (!interaction) {
@@ -163,7 +145,7 @@ module.exports = {
 
 async function getOrCreateRole(guild, roleName, color) {
     try {
-        const existingRole = guild.roles.cache.find((role) => role.name === roleName);
+        const existingRole = guild.roles.cache.find((role) => role.name.toLowerCase().includes(roleName.toLowerCase()));
         if (existingRole) {
             return existingRole;
         } else {
