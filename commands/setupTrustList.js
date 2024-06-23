@@ -18,14 +18,12 @@ module.exports = {
                 .setName('admin_roles')
                 .setDescription('Admin roles')
                 .setRequired(true)
-                .addRolesLimit(5)
         )
         .addRoleOption((option) =>
             option
                 .setName('mod_roles')
                 .setDescription('Mod roles')
                 .setRequired(true)
-                .addRolesLimit(5)
         )
         .addStringOption((option) =>
             option
