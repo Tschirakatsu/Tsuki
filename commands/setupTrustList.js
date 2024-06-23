@@ -28,7 +28,7 @@ module.exports = {
         fs.writeFileSync(jsonFile, JSON.stringify(data));
 
         // Get the allowed roles from the interaction options
-        const allowedRoles = interaction.options.getRoles('allowed_roles').map(role => role.id);
+        const allowedRoles = interaction.options.get('allowed_roles').map(role => role.id);
         // Create a channel named "TrustList" and send an embed
         const trustlistChannel = await interaction.guild.channels.create('TrustList', {
             type: 'GUILD_TEXT',
