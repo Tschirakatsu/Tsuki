@@ -5,7 +5,7 @@
  * @version 23/06/2024
  */
 
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder } = require('discord.js');
 const permissions = {
     SendMessages: 8,
     UseApplicationCommands: 1024,
@@ -105,35 +105,35 @@ module.exports = {
                 permissionOverwrites: [
                     {
                         id: interaction.guild.id,
-                        deny: [permissions.SendMessages, permissions.UseApplicationCommands],
+                        deny: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.UseApplicationCommands],
                     },
                     {
                         id: trustedRole.id,
-                        deny: [permissions.SendMessages, permissions.UseApplicationCommands],
-                        allow: [permissions.ViewChannel, permissions.ReadMessageHistory],
+                        deny: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.UseApplicationCommands],
+                        allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory],
                     },
                     {
                         id: untrustedRole.id,
-                        deny: [permissions.SendMessages, permissions.UseApplicationCommands],
-                        allow: [permissions.ViewChannel, permissions.ReadMessageHistory],
+                        deny: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.UseApplicationCommands],
+                        allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory],
                     },
                     {
                         id: memberRole.id,
-                        allow: [permissions.ViewChannel, permissions.ReadMessageHistory],
+                        allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory],
                     },
                     {
                         id: adminRole.id,
-                        allow: [permissions.SendMessages, permissions.UseApplicationCommands, permissions.ViewChannel, permissions.ReadMessageHistory],
+                        allow: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.UseApplicationCommands, PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory],
                     },
                     {
                         id: modRole.id,
-                        allow: [permissions.SendMessages, permissions.UseApplicationCommands, permissions.ViewChannel, permissions.ReadMessageHistory],
+                        allow: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.UseApplicationCommands, PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory],
                     },
                 ],
             });
 
             // Create an embed for the trustlist setup
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle('TrustList Setup')
                 .setDescription(`This channel has been set up as the trustlist for the server '${interaction.guild.name}'`)
                 .setColor('#0099ff'); // Blue color for embed
