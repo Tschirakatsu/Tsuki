@@ -5,7 +5,7 @@
  * @version 23/06/2024
  */
 
-const { SlashCommandBuilder, Permissions } = require('discord.js');
+const { SlashCommandBuilder, Permissions, BitField } = require('discord.js');
 const fs = require('fs');
 const { join } = require('path');
 
@@ -95,32 +95,33 @@ module.exports = {
             // Create a channel named "TrustList" and set the permissions
             const trustlistChannel = await interaction.guild.channels.create('TrustList', {
                 type: 'GUILD_TEXT',
+                type: 'GUILD_TEXT',
                 permissionOverwrites: [
                     {
                         id: interaction.guild.id,
-                        deny: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS],
+                        deny: [BitField.Flags.SendMessages, BitField.Flags.UseApplicationCommands],
                     },
                     {
                         id: trustedRole.id,
-                        deny: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS],
-                        allow: [Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
+                        deny: [BitField.Flags.SendMessages, BitField.Flags.UseApplicationCommands],
+                        allow: [BitField.Flags.ViewChannel, BitField.Flags.ReadMessageHistory],
                     },
                     {
                         id: untrustedRole.id,
-                        deny: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS],
-                        allow: [Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
+                        deny: [BitField.Flags.SendMessages, BitField.Flags.UseApplicationCommands],
+                        allow: [BitField.Flags.ViewChannel, BitField.Flags.ReadMessageHistory],
                     },
                     {
                         id: memberRole.id,
-                        allow: [Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
+                        allow: [BitField.Flags.ViewChannel, BitField.Flags.ReadMessageHistory],
                     },
                     {
                         id: adminRole.id,
-                        allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS, Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
+                        allow: [BitField.Flags.SendMessages, BitField.Flags.UseApplicationCommands, BitField.Flags.ViewChannel, BitField.Flags.ReadMessageHistory],
                     },
                     {
                         id: modRole.id,
-                        allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS, Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
+                        allow: [BitField.Flags.SendMessages, BitField.Flags.UseApplicationCommands, BitField.Flags.ViewChannel, BitField.Flags.ReadMessageHistory],
                     },
                 ],
             });
