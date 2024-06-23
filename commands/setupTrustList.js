@@ -98,29 +98,29 @@ module.exports = {
                 permissionOverwrites: [
                     {
                         id: interaction.guild.id,
-                        deny: [permissions.sendMessages, permissions.useApplicationCommands],
+                        deny: [permissions.SendMessages, permissions.UseApplicationCommands],
                     },
                     {
                         id: trustedRole.id,
-                        deny: [permissions.sendMessages, permissions.useApplicationCommands],
-                        allow: [permissions.viewChannel, permissions.readMessageHistory],
+                        deny: [permissions.SendMessages, permissions.UseApplicationCommands],
+                        allow: [permissions.ViewChannel, permissions.ReadMessageHistory],
                     },
                     {
                         id: untrustedRole.id,
-                        deny: [permissions.sendMessages, permissions.useApplicationCommands],
-                        allow: [permissions.viewChannel, permissions.readMessageHistory],
+                        deny: [permissions.SendMessages, permissions.UseApplicationCommands],
+                        allow: [permissions.ViewChannel, permissions.ReadMessageHistory],
                     },
                     {
                         id: memberRole.id,
-                        allow: [permissions.viewChannel, permissions.readMessageHistory],
+                        allow: [permissions.ViewChannel, permissions.ReadMessageHistory],
                     },
                     {
                         id: adminRole.id,
-                        allow: [permissions.sendMessages, permissions.useApplicationCommands, permissions.viewChannel, permissions.readMessageHistory],
+                        allow: [permissions.SendMessages, permissions.UseApplicationCommands, permissions.ViewChannel, permissions.ReadMessageHistory],
                     },
                     {
                         id: modRole.id,
-                        allow: [permissions.sendMessages, permissions.useApplicationCommands, permissions.viewChannel, permissions.readMessageHistory],
+                        allow: [permissions.SendMessages, permissions.UseApplicationCommands, permissions.ViewChannel, permissions.ReadMessageHistory],
                     },
                 ],
             });
