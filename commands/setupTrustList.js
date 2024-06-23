@@ -100,7 +100,8 @@ module.exports = {
             fs.writeFileSync(jsonFile, JSON.stringify(data));
 
             // Create a channel named "TrustList" and set the permissions
-            const trustlistChannel = await interaction.guild.channels.create('TrustList', {
+            const trustlistChannel = await interaction.guild.channels.create({
+                name: 'TrustList', // Add the name property here
                 type: 0,
                 permissionOverwrites: [
                     {
