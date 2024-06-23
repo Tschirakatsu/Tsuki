@@ -95,7 +95,6 @@ module.exports = {
             // Create a channel named "TrustList" and set the permissions
             const trustlistChannel = await interaction.guild.channels.create('TrustList', {
                 type: 'GUILD_TEXT',
-                type: 'GUILD_TEXT',
                 permissionOverwrites: [
                     {
                         id: interaction.guild.id,
