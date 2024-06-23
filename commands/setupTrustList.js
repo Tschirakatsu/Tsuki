@@ -9,9 +9,7 @@ module.exports = {
             option
                 .setName('allowed_roles')
                 .setDescription('Roles allowed to send messages and use commands in the trustlist channel')
-                .setRequired(true)
-                .setMinValues(1) // Allow at least one role
-        ),
+                .setRequired(true)),
     async execute(interaction) {
         const guildId = interaction.guild.id;
         const jsonFile = `./Trustlists/Servers/${guildId}.json`; // Generate a JSON file with ServerID as filename
