@@ -144,9 +144,9 @@ module.exports = {
 
             await trustlistChannel.send({ embeds: [embed] });
         } catch (error) {
-            console.error(`Error setting up trustlist: ${error}`);
+            console.error(error);
             interaction.reply({
-                content: 'Error setting up trustlist. Please try again later.',
+                content: 'Error occurred. Please try again later.',
                 ephemeral: true,
             });
         } finally {
@@ -156,7 +156,7 @@ module.exports = {
                     content: 'Command completed successfully.',
                     ephemeral: true,
                 });
-            }, 5000); // 5-second timeout
+            }, 8000); // 8-second timeout
         }
     }
 };
