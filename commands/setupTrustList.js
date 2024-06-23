@@ -1,16 +1,16 @@
-const { SlashCommandBuilder, Permissions, MessageEmbed } = require('discord.js');
-const fs = require('fs');
-const { join } = require('path');
-
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('setuptrustlist')
         .setDescription('Setup the TrustList for this server')
-        .addRoleOption((option) =>
+        .addMultipleSelectOption((option) =>
             option
                 .setName('allowed_roles')
                 .setDescription('Roles allowed to send messages and use commands in the trustlist channel')
                 .setRequired(true)
+                .addChoices(
+                    { name: 'Admin', value: 'admin' },
+                    { name: 'Mod', value: 'mod' }
+                )
         ),
     async execute(interaction) {
         try {
@@ -23,19 +23,19 @@ module.exports = {
 
             // Create or fetch the roles
             const trustedRole = await getOrCreateRole(interaction.guild, 'Trusted', '#00ff00');
-            const untrustedRole = await getOrCreateRole(interaction.guild, 'Untrusted', '#ff0000');
-            const memberRole = await getOrCreateRole(interaction.guild, 'Member', '#0e70bb');
+            const adminRole = await getOrCreateRole(interaction.guild, 'Admin', '#0e70bb');
+            const modRole = await getOrCreateRole(interaction.guild, 'Mod', '#0e70bb');
 
             // Store the role IDs in a JSON file
             const data = {
                 trustedRoleId: trustedRole.id,
-                untrustedRoleId: untrustedRole.id,
-                memberRoleId: memberRole.id,
+                adminRoleId: adminRole.id,
+                modRoleId: modRole.id,
             };
             fs.writeFileSync(jsonFile, JSON.stringify(data));
 
             // Get the allowed roles from the interaction options
-            const allowedRoles = interaction.options.get('allowed_roles').map((role) => role.id);
+            const allowedRoles = interaction.options.get('allowed_roles').map((role) => role.value);
             // Create a channel named "TrustList" and send an embed
             const trustlistChannel = await interaction.guild.channels.create('TrustList', {
                 type: 'GUILD_TEXT',
@@ -44,9 +44,14 @@ module.exports = {
                         id: interaction.guild.id,
                         deny: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS],
                     },
+                    {
+                        id: trustedRole.id,
+                        deny: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS],
+                        allow: [Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
+                    },
                     ...allowedRoles.map((roleId) => ({
-                        id: roleId,
-                        allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS, Permissions.FLAGS.MANAGE_ROLES],
+                        id: roleId === 'admin' ? adminRole.id : modRole.id,
+                        allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS, Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
                     })),
                 ],
             });
