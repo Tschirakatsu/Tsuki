@@ -123,9 +123,21 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setTitle('TrustList Setup')
                 .setDescription(`This channel has been set up as the trustlist for the server '${interaction.guild.name}'`)
-                .setColor('#0099ff'); // Blue color for embed
+                .setColor('#0099ff') // Blue color for embed
+                .addFields([
+                    {
+                        name: 'Roles',
+                        value: `${trustedRole.name}`,
+                        inline: true,
+                    },
+                    {
+                        name: 'Description',
+                        value: 'This is a description of the trustlist',
+                        inline: false,
+                    },
+                ]);
 
-            await trustlistChannel.send({embeds: [embed]});
+            await trustlistChannel.send({ embeds: [embed] });
         } catch (error) {
             console.error(error);
             interaction.reply({
