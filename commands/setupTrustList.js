@@ -165,7 +165,3 @@ async function getOrCreateRole(guild, roleName, color) {
         throw new Error('Failed to create or fetch role');
     }
 }
-
-function getRoleById(guild, roleId) {
-    return guild.roles.cache.get(roleId);
-}
