@@ -17,7 +17,7 @@ module.exports = {
             const guildId = interaction.guild.id;
             const trustlistsPath = join(__dirname, 'Trustlists', 'Servers');
             if (!fs.existsSync(trustlistsPath)) {
-                fs.mkdirSync(trustlistsPath);
+                fs.mkdirSync(trustlistsPath, { recursive: true });
             }
             const jsonFile = `${trustlistsPath}/${guildId}.json`; // Generate a JSON file with ServerID as filename
 
