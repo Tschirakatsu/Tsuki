@@ -92,16 +92,6 @@ module.exports = {
                 memberRole = await getOrCreateRole(interaction.guild, 'Member', '#0000ff');
             }
 
-            // Store the role IDs in a JSON file
-            const data = {
-                adminRoleId: adminRole.id,
-                modRoleId: modRole.id,
-                trustedRoleId: trustedRole.id,
-                untrustedRoleId: untrustedRole.id,
-                memberRoleId: memberRole.id,
-            };
-            fs.writeFileSync(jsonFile, JSON.stringify(data));
-
             // Create a channel named "TrustList" and set the permissions
             const trustlistChannel = await interaction.guild.channels.create({
                 name: 'TrustList', // Add the name property here
@@ -135,6 +125,17 @@ module.exports = {
                     },
                 ],
             });
+
+            // Store the role IDs in a JSON file
+            const data = {
+                adminRoleId: adminRole.id,
+                modRoleId: modRole.id,
+                trustedRoleId: trustedRole.id,
+                untrustedRoleId: untrustedRole.id,
+                memberRoleId: memberRole.id,
+                trustlistChannelId: trustlistChannel.Id,
+            };
+            fs.writeFileSync(jsonFile, JSON.stringify(data));
 
             // Create an embed for the trustlist setup
             const embed = new EmbedBuilder()
