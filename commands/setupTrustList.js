@@ -1,10 +1,3 @@
-/**
- * @file    setupTrustList.js
- * @brief   setup the trustlist logic
- * @author  Created by tschi
- * @version 03/06/2024
- */
-
 const { SlashCommandBuilder, Permissions, MessageEmbed } = require('discord.js');
 const fs = require('fs');
 
@@ -17,6 +10,7 @@ module.exports = {
                 .setName('allowed_roles')
                 .setDescription('Roles allowed to send messages and use commands in the trustlist channel')
                 .setRequired(true)
+                .setMinValues(1) // Allow at least one role
         ),
     async execute(interaction) {
         const guildId = interaction.guild.id;
@@ -36,8 +30,7 @@ module.exports = {
         fs.writeFileSync(jsonFile, JSON.stringify(data));
 
         // Get the allowed roles from the interaction options
-        const allowedRolesOption = interaction.options.getRole('allowed_roles');
-        const allowedRoles = allowedRolesOption ? [allowedRolesOption.value] : [];
+        const allowedRoles = interaction.options.getRole('allowed_roles', true).map(role => role.id);
 
         // Create a channel named "TrustList" and send an embed
         const trustlistChannel = await interaction.guild.channels.create('TrustList', {
@@ -47,8 +40,8 @@ module.exports = {
                     id: interaction.guild.id,
                     deny: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS],
                 },
-                ...allowedRoles.map((role) => ({
-                    id: role,
+                ...allowedRoles.map((roleId) => ({
+                    id: roleId,
                     allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS, Permissions.FLAGS.MANAGE_ROLES],
                 })),
             ],
