@@ -98,29 +98,29 @@ module.exports = {
                 permissionOverwrites: [
                     {
                         id: interaction.guild.id,
-                        deny: [Permissions.SEND_MESSAGES, Permissions.USE_APPLICATION_COMMANDS],
+                        deny: [permissions.sendMessages, permissions.useApplicationCommands],
                     },
                     {
                         id: trustedRole.id,
-                        deny: [Permissions.SEND_MESSAGES, Permissions.USE_APPLICATION_COMMANDS],
-                        allow: [Permissions.VIEW_CHANNEL, Permissions.READ_MESSAGE_HISTORY],
+                        deny: [permissions.sendMessages, permissions.useApplicationCommands],
+                        allow: [permissions.viewChannel, permissions.readMessageHistory],
                     },
                     {
                         id: untrustedRole.id,
-                        deny: [Permissions.SEND_MESSAGES, Permissions.USE_APPLICATION_COMMANDS],
-                        allow: [Permissions.VIEW_CHANNEL, Permissions.READ_MESSAGE_HISTORY],
+                        deny: [permissions.sendMessages, permissions.useApplicationCommands],
+                        allow: [permissions.viewChannel, permissions.readMessageHistory],
                     },
                     {
                         id: memberRole.id,
-                        allow: [Permissions.VIEW_CHANNEL, Permissions.READ_MESSAGE_HISTORY],
+                        allow: [permissions.viewChannel, permissions.readMessageHistory],
                     },
                     {
                         id: adminRole.id,
-                        allow: [Permissions.SEND_MESSAGES, Permissions.USE_APPLICATION_COMMANDS, Permissions.VIEW_CHANNEL, Permissions.READ_MESSAGE_HISTORY],
+                        allow: [permissions.sendMessages, permissions.useApplicationCommands, permissions.viewChannel, permissions.readMessageHistory],
                     },
                     {
                         id: modRole.id,
-                        allow: [Permissions.SEND_MESSAGES, Permissions.USE_APPLICATION_COMMANDS, Permissions.VIEW_CHANNEL, Permissions.READ_MESSAGE_HISTORY],
+                        allow: [permissions.sendMessages, permissions.useApplicationCommands, permissions.viewChannel, permissions.readMessageHistory],
                     },
                 ],
             });
