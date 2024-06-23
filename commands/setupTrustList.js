@@ -145,7 +145,7 @@ module.exports = {
 
 async function getOrCreateRole(guild, roleName, color) {
     try {
-        const existingRole = guild.roles.cache.find((role) => role.name.includes(roleName));
+        const existingRole = guild.roles.cache.find((role) => role.name.toLowerCase().includes(roleName.toLowerCase()));
         if (existingRole) {
             return existingRole;
         } else {
