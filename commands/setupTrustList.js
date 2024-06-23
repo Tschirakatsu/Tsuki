@@ -152,14 +152,10 @@ module.exports = {
         }
         finally
         {
-            if (interaction) {
-                setTimeout(() => {
-                    interaction.reply({
-                        content: 'Command completed successfully.',
-                        ephemeral: true,
-                    });
-                }, 8000); // 8-second timeout
-            }
+            interaction.reply({
+                content: 'Command completed successfully.',
+                ephemeral: true,
+            });
         }
     }
 };
