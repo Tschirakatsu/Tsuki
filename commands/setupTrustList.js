@@ -128,6 +128,8 @@ module.exports = {
                     {
                         name: 'Roles',
                         value: `${trustedRole.name}`,
+                        value:`${untrustedRole.name}`,
+                        value:`${memberRole.name}`,
                         inline: true,
                     },
                     {
