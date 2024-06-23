@@ -5,7 +5,7 @@
  * @version 23/06/2024
  */
 
-const { SlashCommandBuilder, Permissions, BitField, permissionsBits } = require('discord.js');
+const { SlashCommandBuilder, permissions } = require('discord.js');
 const fs = require('fs');
 const { join } = require('path');
 
