@@ -133,7 +133,7 @@ module.exports = {
                 trustedRoleId: trustedRole.id,
                 untrustedRoleId: untrustedRole.id,
                 memberRoleId: memberRole.id,
-                trustlistChannelId: trustlistChannel.Id,
+                trustlistChannelId: trustlistChannel.id,
             };
             fs.writeFileSync(jsonFile, JSON.stringify(data));
 
