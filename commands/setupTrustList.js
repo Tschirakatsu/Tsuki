@@ -1,3 +1,14 @@
+/**
+ * @file    setupTrustList.js
+ * @brief   implements the trustlists logic
+ * @author  Created by tschi
+ * @version 23/06/2024
+ */
+
+const { SlashCommandBuilder, Permissions, MessageEmbed } = require('discord.js');
+const fs = require('fs');
+const { join } = require('path');
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('setuptrustlist')
