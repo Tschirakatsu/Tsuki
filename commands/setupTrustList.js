@@ -140,21 +140,21 @@ module.exports = {
 
             await trustlistChannel.send({ embeds: [embed] });
         } catch (error) {
-            console.error(error);
-            interaction.reply({
-                content: 'Error setting up trustlist. Please try again later.',
-                ephemeral: true,
-            });
-        } finally {
-            // Add a timeout here
-            setTimeout(() => {
-                interaction.reply({
-                    content: 'Command completed successfully.',
-                    ephemeral: true,
-                });
-            }, 5000); // 5-second timeout
-        }
-    }
+        console.error(`Error setting up trustlist: ${error}`);
+        interaction.reply({
+            content: 'Error setting up trustlist. Please try again later.',
+            ephemeral: true,
+        });
+    } finally {
+        // Add a timeout here
+        setTimeout(() => {
+    interaction.reply({
+        content: 'Command completed successfully.',
+        ephemeral: true,
+    });
+}, 5000); // 5-second timeout
+}
+}
 };
 
 async function getOrCreateRole(guild, roleName, color) {
