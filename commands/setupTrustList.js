@@ -15,14 +15,14 @@ module.exports = {
         .setDescription('Setup the TrustList for this server')
         .addRoleOption((option) =>
             option
-                .setName('admin_roles')
-                .setDescription('Admin roles')
+                .setName('admin_role')
+                .setDescription('Admin role')
                 .setRequired(true)
         )
         .addRoleOption((option) =>
             option
-                .setName('mod_roles')
-                .setDescription('Mod roles')
+                .setName('mod_role')
+                .setDescription('Mod role')
                 .setRequired(true)
         )
         .addStringOption((option) =>
@@ -53,9 +53,19 @@ module.exports = {
             const jsonFile = `${trustlistsPath}/${guildId}.json`; // Generate a JSON file with ServerID as filename
 
             // Create or fetch the roles
-            const adminRole = interaction.options.get('admin_role').role;
-            const modRole = interaction.options.get('mod_role').role;
-            let trustedRole, untrustedRole, memberRole;
+            let adminRole, modRole, trustedRole, untrustedRole, memberRole;
+            if (interaction.options.get('admin_role')) {
+                adminRole = interaction.options.get('admin_role').role;
+            } else {
+                await interaction.reply('Error: No admin role provided');
+                return;
+            }
+            if (interaction.options.get('mod_role')) {
+                modRole = interaction.options.get('mod_role').role;
+            } else {
+                await interaction.reply('Error: No mod role provided');
+                return;
+            }
             if (interaction.options.get('trusted_role')) {
                 trustedRole = await getOrCreateRole(interaction.guild, interaction.options.get('trusted_role').value, '#00ff00');
             } else {
@@ -74,8 +84,8 @@ module.exports = {
 
             // Store the role IDs in a JSON file
             const data = {
-                adminRoleId: adminRoles.join(','),
-                modRoleId: modRoles.join(','),
+                adminRoleId: adminRole.id,
+                modRoleId: modRole.id,
                 trustedRoleId: trustedRole.id,
                 untrustedRoleId: untrustedRole.id,
                 memberRoleId: memberRole.id,
@@ -105,11 +115,11 @@ module.exports = {
                         allow: [Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
                     },
                     {
-                        id: adminRoles.join(','),
+                        id: adminRole.id,
                         allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS, Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
                     },
                     {
-                        id: modRoles.join(','),
+                        id: modRole.id,
                         allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS, Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
                     },
                 ],
