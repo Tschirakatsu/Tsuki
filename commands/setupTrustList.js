@@ -58,7 +58,7 @@ module.exports = {
             const guildId = interaction.guild.id;
             const trustlistsPath = join(__dirname, 'Trustlists', 'Servers');
             if (!fs.existsSync(trustlistsPath)) {
-                fs.mkdirSync(trustlistsPath, { recursive: true });
+                fs.mkdirSync(trustlistsPath, {recursive: true});
             }
             const jsonFile = `${trustlistsPath}/${guildId}.json`; // Generate a JSON file with ServerID as filename
 
@@ -142,21 +142,24 @@ module.exports = {
                 .setDescription(`This channel has been set up as the trustlist for the server '${interaction.guild.name}'`)
                 .setColor('#0099ff'); // Blue color for embed
 
-            await trustlistChannel.send({ embeds: [embed] });
+            await trustlistChannel.send({embeds: [embed]});
         } catch (error) {
             console.error(error);
             interaction.reply({
                 content: 'Error occurred. Please try again later.',
                 ephemeral: true,
             });
-        } finally {
-            // Add a timeout here
-            setTimeout(() => {
-                interaction.reply({
-                    content: 'Command completed successfully.',
-                    ephemeral: true,
-                });
-            }, 8000); // 8-second timeout
+        }
+        finally
+        {
+            if (interaction) {
+                setTimeout(() => {
+                    interaction.reply({
+                        content: 'Command completed successfully.',
+                        ephemeral: true,
+                    });
+                }, 8000); // 8-second timeout
+            }
         }
     }
 };
