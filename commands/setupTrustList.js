@@ -1,6 +1,6 @@
 /**
  * @file    setupTrustList.js
- * @brief   setuzp the trustlist logic
+ * @brief   setup the trustlist logic
  * @author  Created by tschi
  * @version 03/06/2024
  */
@@ -45,11 +45,11 @@ module.exports = {
             permissionOverwrites: [
                 {
                     id: interaction.guild.id,
-                    deny: [Permissions.FLAGS.SEND_MESSAGES],
+                    deny: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS],
                 },
                 ...allowedRoles.map((role) => ({
                     id: role,
-                    allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS],
+                    allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS, Permissions.FLAGS.MANAGE_ROLES],
                 })),
             ],
         });
