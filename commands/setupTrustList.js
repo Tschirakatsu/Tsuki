@@ -7,11 +7,10 @@
 
 const { SlashCommandBuilder } = require('discord.js');
 const permissions = {
-    SendMessages: 'SEND_MESSAGES',
-    UseApplicationCommands: 'USE_APPLICATION_COMMANDS',
-    ViewChannel: 'VIEW_CHANNEL',
-    ReadMessageHistory: 'READ_MESSAGE_HISTORY',
-    // Add more permissions as needed
+    SendMessages: 8,
+    UseApplicationCommands: 1024,
+    ViewChannel: 32,
+    ReadMessageHistory: 262144,
 };
 const fs = require('fs');
 const { join } = require('path');
