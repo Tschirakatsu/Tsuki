@@ -13,25 +13,19 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('setuptrustlist')
         .setDescription('Setup the TrustList for this server')
-        .addStringOption((option) =>
+        .addRoleOption((option) =>
             option
                 .setName('admin_roles')
                 .setDescription('Admin roles')
                 .setRequired(true)
-                .addChoices(
-                    { name: 'Admin', value: 'admin' },
-                    { name: 'Mod', value: 'mod' }
-                )
+                .addRolesLimit(5)
         )
-        .addStringOption((option) =>
+        .addRoleOption((option) =>
             option
                 .setName('mod_roles')
                 .setDescription('Mod roles')
                 .setRequired(true)
-                .addChoices(
-                    { name: 'Admin', value: 'admin' },
-                    { name: 'Mod', value: 'mod' }
-                )
+                .addRolesLimit(5)
         )
         .addStringOption((option) =>
             option
@@ -61,8 +55,8 @@ module.exports = {
             const jsonFile = `${trustlistsPath}/${guildId}.json`; // Generate a JSON file with ServerID as filename
 
             // Create or fetch the roles
-            const adminRoles = interaction.options.get('admin_roles').value.split(',').map((role) => role.trim());
-            const modRoles = interaction.options.get('mod_roles').value.split(',').map((role) => role.trim());
+            const adminRoles = interaction.options.get('admin_roles').roles.map((role) => role.id);
+            const modRoles = interaction.options.get('mod_roles').roles.map((role) => role.id);
             let trustedRole, untrustedRole, memberRole;
             if (interaction.options.get('trusted_role')) {
                 trustedRole = await getOrCreateRole(interaction.guild, interaction.options.get('trusted_role').value, '#00ff00');
@@ -82,8 +76,8 @@ module.exports = {
 
             // Store the role IDs in a JSON file
             const data = {
-                adminRoleId: adminRoles.map((role) => getRoleById(interaction.guild, role)).join(','),
-                modRoleId: modRoles.map((role) => getRoleById(interaction.guild, role)).join(','),
+                adminRoleId: adminRoles.join(','),
+                modRoleId: modRoles.join(','),
                 trustedRoleId: trustedRole.id,
                 untrustedRoleId: untrustedRole.id,
                 memberRoleId: memberRole.id,
@@ -113,11 +107,11 @@ module.exports = {
                         allow: [Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
                     },
                     {
-                        id: adminRoles.map((role) => getRoleById(interaction.guild, role)).join(','),
+                        id: adminRoles.join(','),
                         allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS, Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
                     },
                     {
-                        id: modRoles.map((role) => getRoleById(interaction.guild, role)).join(','),
+                        id: modRoles.join(','),
                         allow: [Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.USE_APPLICATION_COMMANDS, Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.READ_MESSAGE_HISTORY],
                     },
                 ],
