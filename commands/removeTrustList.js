@@ -65,9 +65,11 @@ module.exports = {
                 await db.query('DELETE FROM Roles WHERE RoleID = ?', [roleId]);
             }
 
-            // Remove the server and trustlist from the database
-            await db.query('DELETE FROM Servers WHERE ServerID = ?', [guildId]);
+            // Remove the trustlist from the database
             await db.query('DELETE FROM TrustList WHERE ServerID = ?', [guildId]);
+
+            // Remove the server from the database
+            await db.query('DELETE FROM Servers WHERE ServerID = ?', [guildId]);
 
             await db.close();
 
