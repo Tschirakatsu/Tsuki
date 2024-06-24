@@ -39,6 +39,20 @@ module.exports = {
         }
         try {
             const guildId = interaction.guild.id;
+            const db = new DBConnector();
+            await db.connect();
+
+            // Check if the server ID is already present in the Server table
+            const existingServer = await db.query('SELECT * FROM Servers WHERE ServerID = ?', [guildId]);
+            if (existingServer.length > 0) {
+                await interaction.reply({
+                    content: 'Error: Server ID already exists in the database.',
+                    ephemeral: true,
+                });
+                await db.close();
+                return;
+            }
+
             // Create or fetch the roles
             let adminRole, modRole, trustedRole, untrustedRole, memberRole;
             if (interaction.options.get('admin_role')) {
@@ -104,8 +118,6 @@ module.exports = {
             });
 
             // Store the role IDs in the database
-            const db = new DBConnector();
-            await db.connect(); // Ensure the connection is established
             await db.query(`INSERT INTO Servers (ServerID, ServerName) VALUES (?, ?)`, [guildId, interaction.guild.name]);
             await db.query(`INSERT INTO Roles (RoleID, ServerID, RoleName, RoleColor) VALUES (?, ?, ?, ?)`, [adminRole.id, guildId, adminRole.name, adminRole.color]);
             await db.query(`INSERT INTO Roles (RoleID, ServerID, RoleName, RoleColor) VALUES (?, ?, ?, ?)`, [modRole.id, guildId, modRole.name, modRole.color]);
