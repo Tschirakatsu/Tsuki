@@ -16,7 +16,7 @@ const permissions = {
 };
 const fs = require('fs');
 const { join } = require('path');
-const DBConnector = require('./DBConnector');
+const DBConnector = require('DBConnector.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
