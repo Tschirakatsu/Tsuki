@@ -1,10 +1,3 @@
-/**
- * @file    removeTrustList.js
- * @brief   remove the trustlist logic
- * @author  Created by tschi
- * @version 24/06/2024
- */
-
 const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder } = require('discord.js');
 const fs = require('fs');
 const { join } = require('path');
