@@ -49,8 +49,8 @@ module.exports = {
                     content: 'Error: Server ID already exists in the database.',
                     ephemeral: true,
                 });
-                await db.close();
                 console.error('Error: Server ID already exists in the database.');
+                await db.close();
                 return;
             }
 
