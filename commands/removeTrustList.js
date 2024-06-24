@@ -37,8 +37,8 @@ module.exports = {
             }
 
             // Fetch the trusted and untrusted role IDs from the database
-            const trustedRoleId = await db.query('SELECT RoleID FROM Roles WHERE ServerID = ? AND RoleName = ?', [guildId, 'Trusted']);
-            const untrustedRoleId = await db.query('SELECT RoleID FROM Roles WHERE ServerID = ? AND RoleName = ?', [guildId, 'Untrusted']);
+            const trustedRoleId = await db.query('SELECT RoleID FROM Roles WHERE ServerID = ? AND RoleName LIKE ?', [guildId, '%Trusted%']);
+            const untrustedRoleId = await db.query('SELECT RoleID FROM Roles WHERE ServerID = ? AND RoleName LIKE ?', [guildId, '%Untrusted%']);
             const trustListChannelId = await db.query('SELECT TrustListChannelID FROM TrustList WHERE ServerID = ?', [guildId]);
 
             // Delete the trusted and untrusted roles
@@ -58,11 +58,17 @@ module.exports = {
                 await trustListChannel.delete();
             }
 
-            // Remove the trusted and untrusted roles from the database
+            // Remove the roles from the database
+            const roles = await db.query('SELECT RoleID FROM Roles WHERE ServerID = ?', [guildId]);
+            for (const role of roles) {
+                const roleId = role.RoleID;
+                await db.query('DELETE FROM Roles WHERE RoleID = ?', [roleId]);
+            }
+
+            // Remove the server and trustlist from the database
+            await db.query('DELETE FROM Servers WHERE ServerID = ?', [guildId]);
             await db.query('DELETE FROM TrustList WHERE ServerID = ?', [guildId]);
-            await db.query('DELETE FROM TrustList WHERE ServerID = ?', [guildId]);
-            await db.query('DELETE FROM Roles WHERE ServerID = ?', [guildId]);
-            await db.query('DELETE FROM Roles WHERE ServerID = ?', [guildId]);
+
             await db.close();
 
             await interaction.reply({
