@@ -5,6 +5,8 @@
  * @version 23/06/2024
  */
 
+// setupTrustList.js
+
 const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder } = require('discord.js');
 const permissions = {
     SendMessages: 8,
@@ -14,6 +16,7 @@ const permissions = {
 };
 const fs = require('fs');
 const { join } = require('path');
+const DBConnector = require('./DBConnector');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -38,11 +41,6 @@ module.exports = {
         }
         try {
             const guildId = interaction.guild.id;
-            const trustlistsPath = join(__dirname, 'Trustlists', 'Servers');
-            if (!fs.existsSync(trustlistsPath)) {
-                fs.mkdirSync(trustlistsPath, {recursive: true});
-            }
-            const jsonFile = `${trustlistsPath}/${guildId}.json`; // Generate a JSON file with ServerID as filename
 
             // Create or fetch the roles
             let adminRole, modRole, trustedRole, untrustedRole, memberRole;
@@ -108,16 +106,17 @@ module.exports = {
                 ],
             });
 
-            // Store the role IDs in a JSON file
-            const data = {
-                adminRoleId: adminRole.id,
-                modRoleId: modRole.id,
-                trustedRoleId: trustedRole.id,
-                untrustedRoleId: untrustedRole.id,
-                memberRoleId: memberRole.id,
-                trustlistChannelId: trustlistChannel.id,
-            };
-            fs.writeFileSync(jsonFile, JSON.stringify(data));
+            // Store the role IDs in the database
+            const db = new DBConnector();
+            await db.connect();
+            await db.query(`INSERT INTO Servers (ServerID, ServerName) VALUES (?, ?)`, [guildId, interaction.guild.name]);
+            await db.query(`INSERT INTO Roles (RoleID, ServerID, RoleName, RoleColor) VALUES (?, ?, ?, ?)`, [adminRole.id, guildId, adminRole.name, adminRole.color]);
+            await db.query(`INSERT INTO Roles (RoleID, ServerID, RoleName, RoleColor) VALUES (?, ?, ?, ?)`, [modRole.id, guildId, modRole.name, modRole.color]);
+            await db.query(`INSERT INTO Roles (RoleID, ServerID, RoleName, RoleColor) VALUES (?, ?, ?, ?)`, [trustedRole.id, guildId, trustedRole.name, trustedRole.color]);
+            await db.query(`INSERT INTO Roles (RoleID, ServerID, RoleName, RoleColor) VALUES (?, ?, ?, ?)`, [untrustedRole.id, guildId, untrustedRole.name, untrustedRole.color]);
+            await db.query(`INSERT INTO Roles (RoleID, ServerID, RoleName, RoleColor) VALUES (?, ?, ?, ?)`, [memberRole.id, guildId, memberRole.name, memberRole.color]);
+            await db.query(`INSERT INTO TrustList (ServerID, AdminRoleID, ModRoleID, TrustedRoleID, UntrustedRoleID, MemberRoleID, TrustListChannelID) VALUES (?, ?, ?, ?, ?, ?, ?)`, [guildId, adminRole.id, modRole.id, trustedRole.id, untrustedRole.id, memberRole.id, trustlistChannel.id]);
+            await db.close();
 
             // Create an embed for the trustlist setup
             const embed = new EmbedBuilder()
