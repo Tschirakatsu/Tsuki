@@ -1,6 +1,6 @@
-const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder } = require('discord.js');
+const {SlashCommandBuilder, PermissionsBitField, EmbedBuilder} = require('discord.js');
 const fs = require('fs');
-const { join } = require('path');
+const {join} = require('path');
 const DBConnector = require('../DBConnector');
 
 module.exports = {
@@ -62,6 +62,7 @@ module.exports = {
             await db.query('DELETE FROM TrustList WHERE ServerID = ?', [guildId]);
 
             // Remove the server from the database
+            await db.query('DELETE FROM Roles WHERE ServerID = ?', [guildId]); // Add this line
             await db.query('DELETE FROM Servers WHERE ServerID = ?', [guildId]);
 
             await db.close();
