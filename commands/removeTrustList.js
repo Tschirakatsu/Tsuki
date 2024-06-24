@@ -35,18 +35,18 @@ module.exports = {
             const trustListChannelId = await db.query('SELECT TrustListChannelID FROM TrustList WHERE ServerID = ?', [guildId]);
 
             // Delete the trusted and untrusted roles
-            const trustedRole = interaction.guild.roles.cache.find((role) => role.id === trustedRoleId.RoleID);
+            const trustedRole = interaction.guild.roles.cache.find((role) => role.id === trustedRoleId);
             if (trustedRole) {
                 await trustedRole.delete();
             }
 
-            const untrustedRole = interaction.guild.roles.cache.find((role) => role.id === untrustedRoleId.RoleID);
+            const untrustedRole = interaction.guild.roles.cache.find((role) => role.id === untrustedRoleId);
             if (untrustedRole) {
                 await untrustedRole.delete();
             }
 
             // Delete the trustlist channel
-            const trustListChannel = interaction.guild.channels.cache.find((channel) => channel.id === trustListChannelId.TrustListChannelID);
+            const trustListChannel = interaction.guild.channels.cache.find((channel) => channel.id === trustListChannelId);
             if (trustListChannel) {
                 await trustListChannel.delete();
             }
