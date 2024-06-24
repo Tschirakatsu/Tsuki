@@ -6,14 +6,14 @@
  */
 
 const mysql = require('mysql');
-const { host, user, password, database, charset, port, sqlDriver } = require("./Credentials");
+const { host, user, key, database, charset, port, sqlDriver } = require("./Credentials");
 
 class DBConnector {
     constructor() {
         this.connection = mysql.createConnection({
             host: host,
             user: user,
-            password: password,
+            password: key,
             database: database,
             charset: charset,
             port: port,
