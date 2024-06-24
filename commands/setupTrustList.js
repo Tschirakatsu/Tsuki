@@ -5,8 +5,6 @@
  * @version 23/06/2024
  */
 
-// setupTrustList.js
-
 const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder } = require('discord.js');
 const permissions = {
     SendMessages: 8,
@@ -41,7 +39,6 @@ module.exports = {
         }
         try {
             const guildId = interaction.guild.id;
-
             // Create or fetch the roles
             let adminRole, modRole, trustedRole, untrustedRole, memberRole;
             if (interaction.options.get('admin_role')) {
@@ -108,7 +105,7 @@ module.exports = {
 
             // Store the role IDs in the database
             const db = new DBConnector();
-            await db.connect();
+            await db.connect(); // Ensure the connection is established
             await db.query(`INSERT INTO Servers (ServerID, ServerName) VALUES (?, ?)`, [guildId, interaction.guild.name]);
             await db.query(`INSERT INTO Roles (RoleID, ServerID, RoleName, RoleColor) VALUES (?, ?, ?, ?)`, [adminRole.id, guildId, adminRole.name, adminRole.color]);
             await db.query(`INSERT INTO Roles (RoleID, ServerID, RoleName, RoleColor) VALUES (?, ?, ?, ?)`, [modRole.id, guildId, modRole.name, modRole.color]);
@@ -145,9 +142,7 @@ module.exports = {
                 content: 'Error occurred. Please try again later.',
                 ephemeral: true,
             });
-        }
-        finally
-        {
+        } finally {
             interaction.reply({
                 content: 'Command completed successfully.',
                 ephemeral: true,
