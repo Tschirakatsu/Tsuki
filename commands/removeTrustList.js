@@ -59,10 +59,10 @@ module.exports = {
             }
 
             // Remove the trusted and untrusted roles from the database
-            await db.query('DELETE FROM Roles WHERE ServerID = ? AND RoleName = ?', [guildId, 'Trusted']);
-            await db.query('DELETE FROM Roles WHERE ServerID = ? AND RoleName = ?', [guildId, 'Untrusted']);
             await db.query('DELETE FROM TrustList WHERE ServerID = ?', [guildId]);
-
+            await db.query('DELETE FROM TrustList WHERE ServerID = ?', [guildId]);
+            await db.query('DELETE FROM Roles WHERE ServerID = ?', [guildId]);
+            await db.query('DELETE FROM Roles WHERE ServerID = ?', [guildId]);
             await db.close();
 
             await interaction.reply({
