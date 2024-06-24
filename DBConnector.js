@@ -57,3 +57,4 @@ class DBConnector {
         });
     }
 }
+module.exports = DBConnector;
