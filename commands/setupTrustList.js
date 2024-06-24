@@ -50,6 +50,7 @@ module.exports = {
                     ephemeral: true,
                 });
                 await db.close();
+                console.error('Error: Server ID already exists in the database.');
                 return;
             }
 
