@@ -37,18 +37,30 @@ module.exports = {
 // Delete the trusted and untrusted roles
             const trustedRole = interaction.guild.roles.cache.find((role) => role.id === trustedRoleId.RoleID);
             if (trustedRole) {
-                await trustedRole.delete();
+                try {
+                    await trustedRole.delete();
+                } catch (error) {
+                    console.error('Error deleting Trusted role :',error);
+                }
             }
 
             const untrustedRole = interaction.guild.roles.cache.find((role) => role.id === untrustedRoleId.RoleID);
             if (untrustedRole) {
-                await untrustedRole.delete();
+                try {
+                    await untrustedRole.delete();
+                } catch (error) {
+                    console.error('Error deleting untrusted role :',error);
+                }
             }
 
 // Delete the trustlist channel
             const trustListChannel = interaction.guild.channels.cache.find((channel) => channel.id === trustListChannelId.TrustListChannelID);
             if (trustListChannel) {
-                await trustListChannel.delete();
+                try {
+                    await trustListChannel.delete();
+                } catch (error) {
+                    console.error('Error deleting Trust List channel :',error);
+                }
             }
 
             // Remove the trustlist from the database
