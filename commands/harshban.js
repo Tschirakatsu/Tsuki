@@ -1,5 +1,5 @@
 /**
- * @file    ban.js
+ * @file    harshban.js
  * @brief   used to do the most important thing, ban peoples
  * @author  Created by tschi
  * @version 02/06/2024
@@ -12,7 +12,7 @@ const fs = require('fs');
 // exporting the command with all parameters
 module.exports = {
     data: {
-        name: "ban",
+        name: "Harshban",
         description: "Ban a user from the server.",
         options: [
             {
