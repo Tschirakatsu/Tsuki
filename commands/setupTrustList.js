@@ -12,8 +12,6 @@ const permissions = {
     ViewChannel: 32,
     ReadMessageHistory: 262144,
 };
-const fs = require('fs');
-const { join } = require('path');
 const DBConnector = require('../DBConnector');
 
 module.exports = {
