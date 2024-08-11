@@ -18,27 +18,31 @@ module.exports = {
         try {
             await db.connect();
 
-            // Check if the server exists in the database
-            const existingServer = await db.query('SELECT * FROM Servers WHERE ServerID = ?', [guildId]);
-            if (existingServer.length === 0) {
-                await interaction.reply({ content: 'Error: Server ID does not exist in the database.', ephemeral: true });
+            // Fetch all relevant data in a single query
+            const trustListData = await db.query(`
+                SELECT TL.TrustListChannelID, R1.RoleID AS TrustedRoleID, R2.RoleID AS UntrustedRoleID
+                FROM TrustList TL
+                JOIN Roles R1 ON TL.ServerID = R1.ServerID AND R1.RoleName LIKE '%Trusted%'
+                JOIN Roles R2 ON TL.ServerID = R2.ServerID AND R2.RoleName LIKE '%Untrusted%'
+                WHERE TL.ServerID = ?
+            `, [guildId]);
+
+            if (trustListData.length === 0) {
+                await interaction.reply({ content: 'Error: TrustList setup not found for this server.', ephemeral: true });
                 return;
             }
 
-            // Fetch the role and channel IDs
-            const trustedRoleIdResult = await db.query('SELECT RoleID FROM Roles WHERE ServerID = ? AND RoleName LIKE ?', [guildId, '%Trusted%']);
-            const untrustedRoleIdResult = await db.query('SELECT RoleID FROM Roles WHERE ServerID = ? AND RoleName LIKE ?', [guildId, '%Untrusted%']);
-            const trustListChannelIdResult = await db.query('SELECT TrustListChannelID FROM TrustList WHERE ServerID = ?', [guildId]);
+            const { TrustedRoleID, UntrustedRoleID, TrustListChannelID } = trustListData[0];
 
             // Log the fetched IDs for debugging
-            console.log('Trusted Role ID:', trustedRoleIdResult[0]?.RoleID);
-            console.log('Untrusted Role ID:', untrustedRoleIdResult[0]?.RoleID);
-            console.log('TrustList Channel ID:', trustListChannelIdResult[0]?.TrustListChannelID);
+            console.log('Trusted Role ID:', TrustedRoleID);
+            console.log('Untrusted Role ID:', UntrustedRoleID);
+            console.log('TrustList Channel ID:', TrustListChannelID);
 
             // Fetch the roles and channel from the guild cache
-            const trustedRole = interaction.guild.roles.cache.get(trustedRoleIdResult[0]?.RoleID);
-            const untrustedRole = interaction.guild.roles.cache.get(untrustedRoleIdResult[0]?.RoleID);
-            const trustListChannel = interaction.guild.channels.cache.get(trustListChannelIdResult[0]?.TrustListChannelID);
+            const trustedRole = TrustedRoleID ? interaction.guild.roles.cache.get(TrustedRoleID) : null;
+            const untrustedRole = UntrustedRoleID ? interaction.guild.roles.cache.get(UntrustedRoleID) : null;
+            const trustListChannel = TrustListChannelID ? interaction.guild.channels.cache.get(TrustListChannelID) : null;
 
             // Delete the roles if they exist
             if (trustedRole) {
