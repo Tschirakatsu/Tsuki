@@ -1,6 +1,4 @@
-const {SlashCommandBuilder, PermissionsBitField, EmbedBuilder} = require('discord.js');
-const fs = require('fs');
-const {join} = require('path');
+const { SlashCommandBuilder } = require('discord.js');
 const DBConnector = require('../DBConnector');
 
 module.exports = {
@@ -13,75 +11,48 @@ module.exports = {
             console.error('Interaction is null or undefined');
             return;
         }
+
+        const guildId = interaction.guild.id;
+        const db = new DBConnector();
+
         try {
-            const guildId = interaction.guild.id;
-            const db = new DBConnector();
             await db.connect();
 
-            // Check if the server ID is already present in the Server table
+            // Check if the server exists in the database
             const existingServer = await db.query('SELECT * FROM Servers WHERE ServerID = ?', [guildId]);
             if (existingServer.length === 0) {
-                await interaction.reply({
-                    content: 'Error: Server ID does not exist in the database.',
-                    ephemeral: true,
-                });
-                await db.close();
+                await interaction.reply({ content: 'Error: Server ID does not exist in the database.', ephemeral: true });
                 return;
             }
 
-            // Fetch the trusted and untrusted role IDs from the database
+            // Fetch the role and channel IDs
             const trustedRoleId = await db.query('SELECT RoleID FROM Roles WHERE ServerID = ? AND RoleName LIKE ?', [guildId, '%Trusted%']);
             const untrustedRoleId = await db.query('SELECT RoleID FROM Roles WHERE ServerID = ? AND RoleName LIKE ?', [guildId, '%Untrusted%']);
             const trustListChannelId = await db.query('SELECT TrustListChannelID FROM TrustList WHERE ServerID = ?', [guildId]);
 
-// Delete the trusted and untrusted roles
-            const trustedRole = interaction.guild.roles.cache.find((role) => role.id === trustedRoleId.RoleID);
-            if (trustedRole) {
-                try {
-                    await trustedRole.delete();
-                } catch (error) {
-                    console.error('Error deleting Trusted role :',error);
-                }
-            }
+            // Delete the roles
+            const trustedRole = interaction.guild.roles.cache.get(trustedRoleId[0]?.RoleID);
+            if (trustedRole) await trustedRole.delete().catch(console.error);
 
-            const untrustedRole = interaction.guild.roles.cache.find((role) => role.id === untrustedRoleId.RoleID);
-            if (untrustedRole) {
-                try {
-                    await untrustedRole.delete();
-                } catch (error) {
-                    console.error('Error deleting untrusted role :',error);
-                }
-            }
+            const untrustedRole = interaction.guild.roles.cache.get(untrustedRoleId[0]?.RoleID);
+            if (untrustedRole) await untrustedRole.delete().catch(console.error);
 
-// Delete the trustlist channel
-            const trustListChannel = interaction.guild.channels.cache.find((channel) => channel.id === trustListChannelId.TrustListChannelID);
-            if (trustListChannel) {
-                try {
-                    await trustListChannel.delete();
-                } catch (error) {
-                    console.error('Error deleting Trust List channel :',error);
-                }
-            }
+            // Delete the trust list channel
+            const trustListChannel = interaction.guild.channels.cache.get(trustListChannelId[0]?.TrustListChannelID);
+            if (trustListChannel) await trustListChannel.delete().catch(console.error);
 
-            // Remove the trustlist from the database
+            // Remove the trust list and server from the database
             await db.query('DELETE FROM TrustList WHERE ServerID = ?', [guildId]);
-
-            // Remove the server from the database
-            await db.query('DELETE FROM Roles WHERE ServerID = ?', [guildId]); // Add this line
+            await db.query('DELETE FROM Roles WHERE ServerID = ?', [guildId]);
             await db.query('DELETE FROM Servers WHERE ServerID = ?', [guildId]);
 
-            await db.close();
+            await interaction.reply({ content: 'TrustList setup removed successfully.', ephemeral: true });
 
-            await interaction.reply({
-                content: 'TrustList setup removed successfully.',
-                ephemeral: true,
-            });
         } catch (error) {
-            console.error(error);
-            interaction.reply({
-                content: 'Error occurred. Please try again later.',
-                ephemeral: true,
-            });
+            console.error('Error removing TrustList:', error);
+            await interaction.reply({ content: 'An error occurred. Please try again later.', ephemeral: true });
+        } finally {
+            await db.close();
         }
     }
 };
