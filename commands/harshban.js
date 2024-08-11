@@ -12,7 +12,7 @@ const fs = require('fs');
 // exporting the command with all parameters
 module.exports = {
     data: {
-        name: "Harshban",
+        name: "harshban",
         description: "Ban a user from the server.",
         options: [
             {
