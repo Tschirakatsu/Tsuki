@@ -42,7 +42,7 @@ module.exports = {
         const reason = options.getString("reason");
 
 
-        // Check if the member has the BanMembers permission and check if user is trying to kick themselves
+        // Check if the member has the BanMembers permission and check if user is trying to kick themself
         if (!member.permissions.has(PermissionsBitField.Flags.KickMembers)) {
             interaction.reply({
                 content: "You do not have permissions to kick members.",
@@ -59,8 +59,9 @@ module.exports = {
             });
             return;
         }
-        try {
-            await userOption.kick({ reason });
+
+        // kick the user and send a message in an embed
+        await userOption.kick({ reason });
 
         const kickEmbed = new EmbedBuilder()
             .setTitle('User Kicked')
@@ -76,15 +77,7 @@ module.exports = {
             .setImage(randomGifUrl)
             .setColor('#20105c');
 
-        // Send the embed
+        // Send the embed to the log channel
         interaction.reply({ embeds: [kickEmbed] });
-        } catch (error) {
-            // Handle errors, such as if the user ID is invalid or the user is not banned
-            console.error(`Error kicking ${userOption.user.tag}:`, error);
-            interaction.reply({
-                content: `Failed to kick user with ID ${userOption.id}. Make sure the ID is correct and the user is in the server.`,
-                ephemeral: true,
-            });
-        }
     },
 };
