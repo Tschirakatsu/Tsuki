@@ -24,12 +24,11 @@ for (const file of commandFiles) {
 }
 
 client.on("ready", async () => {
-    console.log("Bot Opérationnel");
 
     // save slash commands
     const commands = await client.application?.commands.set(Array.from(client.commands.values()).map(command => command.data));
 
-    console.log(`Commandes slash enregistrées : ${commands.map(command => command.name).join(", ")}`);
+    console.log(`Bot up and running with commands listed here : ${commands.map(command => command.name).join(", ")}`);
 });
 
 client.on("interactionCreate", async (interaction) => {
@@ -52,10 +51,10 @@ client.on("interactionCreate", async (interaction) => {
     } catch (error) {
         console.error(`Error executing ${commandName} command:`, error);
         interaction.reply({
-            content: "An error occurred while processing this command.",
+            content: "An error occurred while processing this command. check server logs or try again",
             ephemeral: true,
         });
     }
 });
 
-client.login(token).then(r => "Bot login and working properly");
+client.login(token).then(r => "Bot login and working properly (or not but you'll see Lol)");
