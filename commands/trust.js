@@ -86,7 +86,10 @@ module.exports = {
                 embeds: [trustedEmbed]
             });
 
-            const generalChannel = interaction.guild.channels.cache.find(channel => channel.name.toLowerCase().includes('general'));
+            const generalChannel = interaction.guild.channels.cache.find(channel => {
+                console.log("Checking channel:", channel.name); // Debug log
+                return channel.name.toLowerCase().includes('general' || 'genéral');
+            });
             console.log("General channel:", generalChannel); // Debug log
 
             if (generalChannel) {
