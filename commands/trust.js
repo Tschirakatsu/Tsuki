@@ -45,12 +45,13 @@ module.exports = {
         }
 
         try {
+            const normalizeString = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
             const roles = interaction.guild.roles.cache;
             console.log("Fetched roles:", roles.map(role => role.name)); // Debug log
 
-            const trustedRole = roles.find(role => role.name.toLowerCase().includes('trusted'));
-            const untrustedRole = roles.find(role => role.name.toLowerCase().includes('untrusted'));
-            const memberRole = roles.find(role => role.name.toLowerCase().includes('member'));
+            const trustedRole = roles.find(role => normalizeString(role.name).includes('trusted'));
+            const untrustedRole = roles.find(role => normalizeString(role.name).includes('untrusted'));
+            const memberRole = roles.find(role => normalizeString(role.name).includes('member'));
 
             if (!trustedRole || !untrustedRole || !memberRole) {
                 throw new Error('One or more roles were not found');
@@ -86,7 +87,6 @@ module.exports = {
                 embeds: [trustedEmbed]
             });
 
-            const normalizeString = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
             const generalChannel = interaction.guild.channels.cache.find(channel => {
                 console.log("Checking channel:", channel.name); // Debug log
                 return normalizeString(channel.name).includes('general');
