@@ -86,9 +86,10 @@ module.exports = {
                 embeds: [trustedEmbed]
             });
 
+            const normalizeString = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
             const generalChannel = interaction.guild.channels.cache.find(channel => {
                 console.log("Checking channel:", channel.name); // Debug log
-                return channel.name.toLowerCase().includes('general' || 'genéral');
+                return normalizeString(channel.name).includes('general');
             });
             console.log("General channel:", generalChannel); // Debug log
 
