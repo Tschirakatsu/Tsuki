@@ -50,7 +50,7 @@ module.exports = {
 
             const trustedRole = roles.find(role => role.name.toLowerCase().includes('trusted'));
             const untrustedRole = roles.find(role => role.name.toLowerCase().includes('untrusted'));
-            const memberRole = roles.find(role => role.name.toLowerCase().includes('member'));
+            const memberRole = roles.find(role => role.name.toLowerCase().includes('member' || 'membre'));
 
             if (!trustedRole || !untrustedRole || !memberRole) {
                 throw new Error('One or more roles were not found');
@@ -86,7 +86,7 @@ module.exports = {
                 embeds: [trustedEmbed]
             });
 
-            const generalChannel = interaction.guild.channels.cache.find(channel => channel.name.toLowerCase().includes('general'));
+            const generalChannel = interaction.guild.channels.cache.find(channel => channel.name.toLowerCase().includes('general' || 'gén'));
             if (generalChannel) {
                 const welcomeMessage = `Welcome to the server, ${userOption}! You've been trusted by ${user.tag}.`;
                 generalChannel.send(welcomeMessage);
