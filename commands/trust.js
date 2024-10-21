@@ -86,10 +86,15 @@ module.exports = {
                 embeds: [trustedEmbed]
             });
 
-            const generalChannel = interaction.guild.channels.cache.find(channel => channel.name.toLowerCase().includes('general' || 'gén'));
+           const generalChannel = interaction.guild.channels.cache.find(channel => channel.name.toLowerCase().includes('general'));
             if (generalChannel) {
-                const welcomeMessage = `Welcome to the server, ${userOption}! You've been trusted by ${user.tag}.`;
-                generalChannel.send(welcomeMessage);
+                const welcomeEmbed = new EmbedBuilder()
+                    .setTitle('Welcome!')
+                    .setDescription(`Welcome to the server, ${userOption.user.tag}! You've been trusted by ${user.tag}.`)
+                    .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
+                    .setColor('#00ff00');
+
+                generalChannel.send({ embeds: [welcomeEmbed] });
             }
 
         } catch (error) {
