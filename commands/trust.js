@@ -45,17 +45,12 @@ module.exports = {
         }
 
         try {
-            const roles = await interaction.guild.roles.fetch();
+            const roles = interaction.guild.roles.cache;
+            console.log("Fetched roles:", roles.map(role => role.name)); // Debug log
 
-            if (!roles) {
-                throw new Error('Roles fetching failed');
-            }
-
-            console.log("Fetched roles:", roles.cache ? roles.cache.map(role => role.name) : 'No roles fetched'); // Debug log
-
-            const trustedRole = roles.cache ? roles.cache.find(role => role.name.toLowerCase().includes('trusted')) : null;
-            const untrustedRole = roles.cache ? roles.cache.find(role => role.name.toLowerCase().includes('untrusted')) : null;
-            const memberRole = roles.cache ? roles.cache.find(role => role.name.toLowerCase().includes('member')) : null;
+            const trustedRole = roles.find(role => role.name.toLowerCase().includes('trusted'));
+            const untrustedRole = roles.find(role => role.name.toLowerCase().includes('untrusted'));
+            const memberRole = roles.find(role => role.name.toLowerCase().includes('member'));
 
             if (!trustedRole || !untrustedRole || !memberRole) {
                 throw new Error('One or more roles were not found');
