@@ -86,7 +86,9 @@ module.exports = {
                 embeds: [trustedEmbed]
             });
 
-            const generalChannel = interaction.guild.channels.cache.find(channel => channel.name.toLowerCase().includes('general', 'genéral'));
+            const generalChannel = interaction.guild.channels.cache.find(channel => channel.name.toLowerCase().includes('general'));
+            console.log("General channel:", generalChannel); // Debug log
+
             if (generalChannel) {
                 const welcomeEmbed = new EmbedBuilder()
                     .setTitle('Welcome!')
