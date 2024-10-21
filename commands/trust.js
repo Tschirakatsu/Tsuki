@@ -46,9 +46,17 @@ module.exports = {
 
         try {
             const roles = await interaction.guild.roles.fetch();
-            const trustedRoleId = roles.cache.find(role => role.name.toLowerCase().includes('trusted')).id;
-            const untrustedRoleId = roles.cache.find(role => role.name.toLowerCase().includes('untrusted')).id;
-            const memberRoleId = roles.cache.find(role => role.name.toLowerCase().includes('member')).id;
+            const trustedRole = roles.cache.find(role => role.name.toLowerCase().includes('trusted'));
+            const untrustedRole = roles.cache.find(role => role.name.toLowerCase().includes('untrusted'));
+            const memberRole = roles.cache.find(role => role.name.toLowerCase().includes('member'));
+
+            if (!trustedRole || !untrustedRole || !memberRole) {
+                throw new Error('One or more roles were not found');
+            }
+
+            const trustedRoleId = trustedRole.id;
+            const untrustedRoleId = untrustedRole.id;
+            const memberRoleId = memberRole.id;
 
             await userOption.roles.add(trustedRoleId);
             await userOption.roles.add(memberRoleId);
@@ -91,4 +99,3 @@ module.exports = {
         }
     },
 };
-
