@@ -75,6 +75,13 @@ module.exports = {
             await interaction.reply({
                 embeds: [trustedEmbed]
             });
+
+            const generalChannel = interaction.guild.channels.cache.find(channel => channel.name.toLowerCase().includes('general'));
+            if (generalChannel) {
+                const welcomeMessage = `Welcome to the server, ${userOption}! You've been trusted by ${user.tag}.`;
+                generalChannel.send(welcomeMessage);
+            }
+
         } catch (error) {
             console.error('Error giving roles:', error);
             await interaction.reply({
@@ -85,11 +92,3 @@ module.exports = {
     },
 };
 
-// Automated welcome message for new members
-client.on('guildMemberAdd', async member => {
-    const generalChannel = member.guild.channels.cache.find(channel => channel.name.toLowerCase().includes('general'));
-    if (generalChannel) {
-        const welcomeMessage = `Welcome to the server, ${member}!`;
-        generalChannel.send(welcomeMessage);
-    }
-});
