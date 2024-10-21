@@ -46,6 +46,8 @@ module.exports = {
 
         try {
             const roles = await interaction.guild.roles.fetch();
+            console.log("Fetched roles:", roles.cache.map(role => role.name)); // Debug log
+
             const trustedRole = roles.cache.find(role => role.name.toLowerCase().includes('trusted'));
             const untrustedRole = roles.cache.find(role => role.name.toLowerCase().includes('untrusted'));
             const memberRole = roles.cache.find(role => role.name.toLowerCase().includes('member'));
