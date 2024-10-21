@@ -50,7 +50,7 @@ module.exports = {
 
             const trustedRole = roles.find(role => role.name.toLowerCase().includes('trusted'));
             const untrustedRole = roles.find(role => role.name.toLowerCase().includes('untrusted'));
-            const memberRole = roles.find(role => role.name.toLowerCase().includes('member' || 'membre'));
+            const memberRole = roles.find(role => role.name.toLowerCase().includes('member'));
 
             if (!trustedRole || !untrustedRole || !memberRole) {
                 throw new Error('One or more roles were not found');
@@ -86,7 +86,7 @@ module.exports = {
                 embeds: [trustedEmbed]
             });
 
-           const generalChannel = interaction.guild.channels.cache.find(channel => channel.name.toLowerCase().includes('general'));
+            const generalChannel = interaction.guild.channels.cache.find(channel => channel.name.toLowerCase().includes('general'));
             if (generalChannel) {
                 const welcomeEmbed = new EmbedBuilder()
                     .setTitle('Welcome!')
@@ -94,7 +94,11 @@ module.exports = {
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .setColor('#00ff00');
 
-                generalChannel.send({ embeds: [welcomeEmbed] });
+                await generalChannel.send({ embeds: [welcomeEmbed] }).catch(err => {
+                    console.error('Error sending welcome message:', err);
+                });
+            } else {
+                console.error('General channel not found');
             }
 
         } catch (error) {
