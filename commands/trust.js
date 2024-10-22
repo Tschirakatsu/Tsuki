@@ -5,7 +5,7 @@
  * @version 21/10/2024
  */
 
-const { CommandInteraction, PermissionsBitField, EmbedBuilder } = require("discord.js");
+const { PermissionsBitField, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     data: {
@@ -91,7 +91,7 @@ module.exports = {
             if (language === 'en') {
                 trustedEmbed = new EmbedBuilder()
                     .setTitle('User Trusted')
-                    .setDescription(`${userOption.user.tag} has been trusted on the server.`)
+                    .setDescription(`<@${userOption.user.id}> has been trusted on the server.`)
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .addFields(
                         { name: 'Moderator', value: modTag, inline: true },
@@ -108,7 +108,7 @@ module.exports = {
 
                 welcomeEmbed = new EmbedBuilder()
                     .setTitle('Welcome!')
-                    .setDescription(`Welcome to the server, ${userTag}! You've been trusted by ${modTag}.`)
+                    .setDescription(`Welcome to the server, <@${userTag}>! You've been trusted by ${modTag}.`)
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .setColor('#00ff00');
             } else if (language === 'fr') {
@@ -131,7 +131,7 @@ module.exports = {
 
                 welcomeEmbed = new EmbedBuilder()
                     .setTitle('Bienvenue !')
-                    .setDescription(`Bienvenue sur le serveur, ${userTag} ! Vous avez été approuvé par ${modTag}.`)
+                    .setDescription(`Bienvenue sur le serveur, <@${userTag}> ! Vous avez été approuvé par ${modTag}.`)
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .setColor('#00ff00');
             }
