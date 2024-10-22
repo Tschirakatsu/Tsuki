@@ -26,6 +26,8 @@ module.exports = {
                 choices: [
                     {
                         name: "Français", value: "fr",
+                    },
+                    {
                         name: "English", value: "en",
                     }
                 ]
