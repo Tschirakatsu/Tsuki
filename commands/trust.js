@@ -81,9 +81,10 @@ module.exports = {
             await userOption.roles.add(memberRoleId);
             await userOption.roles.remove(untrustedRoleId);
 
-            const tag = user.tag;
+            const userTag = userOption.displayName; // Fetch nickname instead of tag
+            const modTag = member.displayName; // Fetch moderator's nickname
             const ID = userOption.user.id;
-            const creationDate = userOption.user.createdAt.toDateString();
+            const creationDate = userOption.user.createdAt.toDateString()
 
             let trustedEmbed;
             let welcomeEmbed;
@@ -94,8 +95,8 @@ module.exports = {
                     .setDescription(`${userOption.user.tag} has been trusted on the server.`)
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .addFields(
-                        { name: 'Moderator', value: user.tag, inline: true },
-                        { name: 'Trusted User', value: tag, inline: true },
+                        { name: 'Moderator', value: modTag, inline: true },
+                        { name: 'Trusted User', value: userTag, inline: true },
                         { name: 'ID', value: ID, inline: true },
                         { name: 'Account Created At', value: creationDate, inline: true }
                     )
@@ -107,7 +108,7 @@ module.exports = {
 
                 welcomeEmbed = new EmbedBuilder()
                     .setTitle('Welcome!')
-                    .setDescription(`Welcome to the server, ${user.tag}! You've been trusted by ${user.tag}.`)
+                    .setDescription(`Welcome to the server, ${modTag}! You've been trusted by ${modTag}.`)
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .setColor('#00ff00');
             } else if (language === 'fr') {
@@ -116,8 +117,8 @@ module.exports = {
                     .setDescription(`${userOption.user.tag} a été approuvé sur le serveur.`)
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .addFields(
-                        { name: 'Modérateur', value: user.tag, inline: true },
-                        { name: 'Utilisateur', value: tag, inline: true },
+                        { name: 'Modérateur', value: modTag, inline: true },
+                        { name: 'Utilisateur', value: userTag, inline: true },
                         { name: 'ID', value: ID, inline: true },
                         { name: 'Compte créé le', value: creationDate, inline: true }
                     )
@@ -129,7 +130,7 @@ module.exports = {
 
                 welcomeEmbed = new EmbedBuilder()
                     .setTitle('Bienvenue !')
-                    .setDescription(`Bienvenue sur le serveur, ${userOption.user.tag} ! Vous avez été approuvé par ${user.tag}.`)
+                    .setDescription(`Bienvenue sur le serveur, ${userTag} ! Vous avez été approuvé par ${modTag}.`)
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .setColor('#00ff00');
             }
