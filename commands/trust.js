@@ -108,7 +108,7 @@ module.exports = {
 
                 welcomeEmbed = new EmbedBuilder()
                     .setTitle('Welcome!')
-                    .setDescription(`Welcome to the server, ${modTag}! You've been trusted by ${modTag}.`)
+                    .setDescription(`Welcome to the server, ${userTag}! You've been trusted by ${modTag}.`)
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .setColor('#00ff00');
             } else if (language === 'fr') {
