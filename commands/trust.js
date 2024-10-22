@@ -49,6 +49,8 @@ module.exports = {
         const userOption = options.getMember("user");
         const user = interaction.user;
         const reason = options.getString("reason");
+        const language = options.getString("language"); // Retrieve the language option
+
 
         if (!member.permissions.has(PermissionsBitField.Flags.ManageRoles)) {
             await interaction.reply({
