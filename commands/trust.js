@@ -81,7 +81,7 @@ module.exports = {
             await userOption.roles.add(memberRoleId);
             await userOption.roles.remove(untrustedRoleId);
 
-            const tag = userOption.user.tag;
+            const tag = user.tag;
             const ID = userOption.user.id;
             const creationDate = userOption.user.createdAt.toDateString();
 
@@ -99,13 +99,15 @@ module.exports = {
                         { name: 'ID', value: ID, inline: true },
                         { name: 'Account Created At', value: creationDate, inline: true }
                     )
-                    .setFooter({ text: `Reason: ${reason}` })
                     .setImage("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWcwcWJ4eGF1MjZpMjF1ZmxmZGtoZ282NTZ4dHZzaGpxZHFqY3R2NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1202FEj8qyNg3K/giphy.gif")
                     .setColor('#613ee8');
+                if (reason) {
+                    trustedEmbed.setFooter({ text: `Reason: ${reason}` });
+                }
 
                 welcomeEmbed = new EmbedBuilder()
                     .setTitle('Welcome!')
-                    .setDescription(`Welcome to the server, ${userOption.user.tag}! You've been trusted by ${user.tag}.`)
+                    .setDescription(`Welcome to the server, ${user.tag}! You've been trusted by ${user.tag}.`)
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .setColor('#00ff00');
             } else if (language === 'fr') {
@@ -119,9 +121,11 @@ module.exports = {
                         { name: 'ID', value: ID, inline: true },
                         { name: 'Compte créé le', value: creationDate, inline: true }
                     )
-                    .setFooter({ text: `Raison : ${reason}` })
                     .setImage("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWcwcWJ4eGF1MjZpMjF1ZmxmZGtoZ282NTZ4dHZzaGpxZHFqY3R2NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1202FEj8qyNg3K/giphy.gif")
                     .setColor('#613ee8');
+                if (reason) {
+                    trustedEmbed.setFooter({ text: `Reason: ${reason}` });
+                }
 
                 welcomeEmbed = new EmbedBuilder()
                     .setTitle('Bienvenue !')
