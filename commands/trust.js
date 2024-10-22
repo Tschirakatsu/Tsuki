@@ -19,11 +19,23 @@ module.exports = {
                 required: true,
             },
             {
-                name: "reason",
-                description: "La raison de donner le rôle",
+                name: "language",
+                description: "choose the language in which the embeds will be displayed",
                 type: 3, // STRING type
                 required: true,
+                choices: [
+                    {
+                        name: "Français", value: "fr",
+                        name: "English", value: "en",
+                    }
+                ]
             },
+            {
+                name: "reason",
+                description: "The reason to give the role.",
+                type: 3, // STRING type
+                required: false,
+            }
         ],
     },
     async execute(interaction) {
@@ -38,7 +50,7 @@ module.exports = {
 
         if (!member.permissions.has(PermissionsBitField.Flags.ManageRoles)) {
             await interaction.reply({
-                content: "Vous n'avez pas la permission d'exécuter cette commande.",
+                content: "You do not have the permisson to execute this command.",
                 ephemeral: true,
             });
             return;
@@ -69,19 +81,50 @@ module.exports = {
             const ID = userOption.user.id;
             const creationDate = userOption.user.createdAt.toDateString();
 
-            const trustedEmbed = new EmbedBuilder()
-                .setTitle('User Trusted')
-                .setDescription(`${userOption.user.tag} has been trusted on the server.`)
-                .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
-                .addFields(
-                    { name: 'Moderator', value: user.tag, inline: true },
-                    { name: 'Trusted User', value: tag, inline: true },
-                    { name: 'ID', value: ID, inline: true },
-                    { name: 'Account Created At', value: creationDate, inline: true }
-                )
-                .setFooter({ text: `Reason: ${reason}` })
-                .setImage("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWcwcWJ4eGF1MjZpMjF1ZmxmZGtoZ282NTZ4dHZzaGpxZHFqY3R2NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1202FEj8qyNg3K/giphy.gif")
-                .setColor('#613ee8');
+            let trustedEmbed;
+            let welcomeEmbed;
+
+            if (language === 'en') {
+                trustedEmbed = new EmbedBuilder()
+                    .setTitle('User Trusted')
+                    .setDescription(`${userOption.user.tag} has been trusted on the server.`)
+                    .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
+                    .addFields(
+                        { name: 'Moderator', value: user.tag, inline: true },
+                        { name: 'Trusted User', value: tag, inline: true },
+                        { name: 'ID', value: ID, inline: true },
+                        { name: 'Account Created At', value: creationDate, inline: true }
+                    )
+                    .setFooter({ text: `Reason: ${reason}` })
+                    .setImage("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWcwcWJ4eGF1MjZpMjF1ZmxmZGtoZ282NTZ4dHZzaGpxZHFqY3R2NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1202FEj8qyNg3K/giphy.gif")
+                    .setColor('#613ee8');
+
+                welcomeEmbed = new EmbedBuilder()
+                    .setTitle('Welcome!')
+                    .setDescription(`Welcome to the server, ${userOption.user.tag}! You've been trusted by ${user.tag}.`)
+                    .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
+                    .setColor('#00ff00');
+            } else if (language === 'fr') {
+                trustedEmbed = new EmbedBuilder()
+                    .setTitle('Utilisateur de confiance')
+                    .setDescription(`${userOption.user.tag} a été approuvé sur le serveur.`)
+                    .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
+                    .addFields(
+                        { name: 'Modérateur', value: user.tag, inline: true },
+                        { name: 'Utilisateur', value: tag, inline: true },
+                        { name: 'ID', value: ID, inline: true },
+                        { name: 'Compte créé le', value: creationDate, inline: true }
+                    )
+                    .setFooter({ text: `Raison : ${reason}` })
+                    .setImage("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWcwcWJ4eGF1MjZpMjF1ZmxmZGtoZ282NTZ4dHZzaGpxZHFqY3R2NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1202FEj8qyNg3K/giphy.gif")
+                    .setColor('#613ee8');
+
+                welcomeEmbed = new EmbedBuilder()
+                    .setTitle('Bienvenue !')
+                    .setDescription(`Bienvenue sur le serveur, ${userOption.user.tag} ! Vous avez été approuvé par ${user.tag}.`)
+                    .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
+                    .setColor('#00ff00');
+            }
 
             await interaction.reply({
                 embeds: [trustedEmbed]
@@ -94,12 +137,6 @@ module.exports = {
             console.log("General channel:", generalChannel); // Debug log
 
             if (generalChannel) {
-                const welcomeEmbed = new EmbedBuilder()
-                    .setTitle('Welcome!')
-                    .setDescription(`Welcome to the server, ${userOption.user.tag}! You've been trusted by ${user.tag}.`)
-                    .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
-                    .setColor('#00ff00');
-
                 await generalChannel.send({ embeds: [welcomeEmbed] }).catch(err => {
                     console.error('Error sending welcome message:', err);
                 });
@@ -110,7 +147,7 @@ module.exports = {
         } catch (error) {
             console.error('Error giving roles:', error);
             await interaction.reply({
-                content: "Une erreur s'est produite lors de l'attribution des rôles.",
+                content: "There was an error while trying to attribute the roles or while fetching channels. please try again or contact an administrator.",
                 ephemeral: true,
             });
         }
