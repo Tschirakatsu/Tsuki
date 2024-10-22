@@ -10,11 +10,11 @@ const { CommandInteraction, PermissionsBitField, EmbedBuilder } = require("disco
 module.exports = {
     data: {
         name: "trust",
-        description: "Donne le rôle trusted à un utilisateur",
+        description: "This command is used to trust users on the server.",
         options: [
             {
                 name: "user",
-                description: "L'utilisateur à qui donner le rôle",
+                description: "The user to trust.",
                 type: 6, // USER type
                 required: true,
             },
@@ -47,8 +47,7 @@ module.exports = {
 
         const { member, options } = interaction;
         const userOption = options.getMember("user");
-        const user = interaction.user;
-        const reason = options.getString("reason");
+        const reason = options.getString("reason") || "No reason provided"; // Default reason if not provided
         const language = options.getString("language"); // Retrieve the language option
 
 
@@ -102,7 +101,8 @@ module.exports = {
                     )
                     .setImage("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWcwcWJ4eGF1MjZpMjF1ZmxmZGtoZ282NTZ4dHZzaGpxZHFqY3R2NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1202FEj8qyNg3K/giphy.gif")
                     .setColor('#613ee8');
-                if (reason) {
+
+                if (reason && reason !== "No reason provided") {
                     trustedEmbed.setFooter({ text: `Reason: ${reason}` });
                 }
 
@@ -124,7 +124,8 @@ module.exports = {
                     )
                     .setImage("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWcwcWJ4eGF1MjZpMjF1ZmxmZGtoZ282NTZ4dHZzaGpxZHFqY3R2NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1202FEj8qyNg3K/giphy.gif")
                     .setColor('#613ee8');
-                if (reason) {
+
+                if (reason && reason !== "No reason provided") {
                     trustedEmbed.setFooter({ text: `Reason: ${reason}` });
                 }
 
