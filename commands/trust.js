@@ -108,12 +108,12 @@ module.exports = {
 
                 welcomeEmbed = new EmbedBuilder()
                     .setTitle('Welcome!')
-                    .setDescription(`Welcome to the server, <@${userTag}>! You've been trusted by ${modTag}.`)
+                    .setDescription(`Welcome to the server, <@${userOption.user.id}>! You've been trusted by ${modTag}.`)
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .setColor('#00ff00');
             } else if (language === 'fr') {
                 trustedEmbed = new EmbedBuilder()
-                    .setTitle('Utilisateur de confiance')
+                    .setTitle('Utilisateur approuvé')
                     .setDescription(`${userOption.user.tag} a été approuvé sur le serveur.`)
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .addFields(
@@ -131,7 +131,7 @@ module.exports = {
 
                 welcomeEmbed = new EmbedBuilder()
                     .setTitle('Bienvenue !')
-                    .setDescription(`Bienvenue sur le serveur, <@${userTag}> ! Vous avez été approuvé par ${modTag}.`)
+                    .setDescription(`Bienvenue sur le serveur, <@${userOption.user.id}> ! Vous avez été approuvé par ${modTag}.`)
                     .setThumbnail(userOption.user.displayAvatarURL({ dynamic: true }))
                     .setColor('#00ff00');
             }
