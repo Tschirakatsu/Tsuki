@@ -1,8 +1,6 @@
 # Tsuki discord bot
 
 
-### this repository might become the main one over time, when we will reach the state of development of the main repository, it will progressively take the place of the main repository for my bot and the other one will probably be deleted
-Tsuki for testing purposes and new discord.js migration, discord bot
+### This repository has overcome the dev state of the main repo, merge will be done one day... 
 
-for this git repo don't expect good gestion, i will only work on the main branch since i consider that a test repo is not really useful to setup git flow or anything like that
-
+main branch will become develop and gradually will be merged with the main of my old repo.
