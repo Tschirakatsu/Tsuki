@@ -1,6 +1,6 @@
 /**
  * @file    trust.js
- * @brief   quick description of the purpose of the file
+ * @brief   command used to trust peoples.
  * @author  Created by Luna :3
  * @version 21/10/2024
  */
